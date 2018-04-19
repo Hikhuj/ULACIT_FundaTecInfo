@@ -1,2 +1,3 @@
 # ULACIT_FundaTecInfo
-Todo proyecto de la carrera personal de Ing. en Informatica de la ULACIT
+
+Proyecto de alquiler de video para el curso de Fundamentos de Tecnologias de la Informacion, ULACIT, 2018, Cuatrimestre I
