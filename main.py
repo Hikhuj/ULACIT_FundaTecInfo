@@ -18,19 +18,26 @@
 # Clases
 def main():
 
-	# Menu inicial
+	# Saludo Inicial
+	saludo_inicial()
 
-	# Seccion principal de programa de python
+	# Desplegar menu de aplicacion
 	menu()
 
-def menu():
-	# llamar a esta funcion
 
+def menu():
 	# mostras las opciones de menu
 	opciones_de_menu()
 
-	# preguntar que opcion quiere hacer, se debe evaluar que funcion es
+	# obtener opcion de menu
+	opcion_menu = int(input("Digite una opcion de menu"))
+	
+	
+	if is_int(opcion_menu) == True:
+		if opcion_menu >= 1 and opcion_menu <= 3
+
 		
+
 def saludo_inicial():
 	print("* --------------------------------------- *")
 	print("|                                         |")
@@ -42,19 +49,23 @@ def saludo_inicial():
 	print("Inicializando sistema, por favor espere...")
 
 
+
 def opciones_de_menu():
-	print("Por favor ingrese una opcion:")
-	print("1. BlaBla")
-	print("2. BlaBla")
-	print("3. BlaBla")
-	print("4. BlaBla")
-	print("5. BlaBla")
+	print("Opciones de Menu")
+	print("1. Registrar clientes nuevos")
+	print("2. Menu de Peliculas")
+	print("3. Consultar informacion")
+	print("4. Salir")
 
 
-
-
-	
-
+def es_un_numero(variable):
+    if type(variable) == int:
+        return True
+    else:
+        if val.is_integer():
+            return True
+        else:
+            return False
 
 
 
