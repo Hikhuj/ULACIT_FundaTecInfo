@@ -22,14 +22,11 @@ def menu():
 		# Funcion imprime opciones de menu
 		opciones_de_menu()
 
-		opcion_menu = input("Por favor ingrese una opcion (1-3): \n")
+		opcion_menu = input("Por favor ingrese una opcion (1-3): ")
 
-		respuesta_es_numero = es_un_numero(opcion_menu)
-
-		if respuesta_es_numero == True:
-
+		try:
+			
 			opcion_menu = int(opcion_menu)
-
 			if opcion_menu == 1:
 				print("\n1. Registrar clientes nuevos\n")
 			elif opcion_menu == 2:
@@ -39,9 +36,11 @@ def menu():
 			else:
 				despedida()
 
-		else:
+		except ValueError:
 			# No es un numero
+			print("\n")
 			print("El valor ingresado no es un numero, intente de nuevo")
+			print("\n")
 			menu()
 	
 
