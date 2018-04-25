@@ -13,36 +13,40 @@
 #  Funciones
 def menu():
 	
-	# Opciones de menu
-	opciones_de_menu()
+	# Variable permite que ingrese al ciclo
+	opcion_menu = 1
 
-	## Recibir opcion acorde a funcion anterior
-	opcion_menu = input('Por favor ingrese una opcion (1-4): ')
+	# Ciclo mantiene al usuario dentro del menu hasta que digite X numero y se salga
+	while opcion_menu >= 1 and opcion_menu <= 3:
 
-	es_numero = es_un_numero(opcion_menu)
+		# Funcion imprime opciones de menu
+		opciones_de_menu()
 
-	while es_numero == True:
-		
-		# Desplegar si opcion de menu es valido
-		if type(int(opcion_menu)) == int:
+		opcion_menu = input("Por favor ingrese una opcion (1-3): \n")
 
-			if int(opcion_menu) == 1:
-				print ("1. Registrar clientes nuevos")
-			elif int(opcion_menu) == 2:
-			    print ("2. Menu de peliculas")
-			elif int(opcion_menu) == 3:
-				print ("3. Consultar informacion")
+		respuesta_es_numero = es_un_numero(opcion_menu)
+
+		if respuesta_es_numero == True:
+
+			opcion_menu = int(opcion_menu)
+
+			if opcion_menu == 1:
+				print("\n1. Registrar clientes nuevos\n")
+			elif opcion_menu == 2:
+			    print("\n2. Menu de peliculas\n")
+			elif opcion_menu == 3:
+				print("\n3. Consultar informacion\n")
 			else:
-				print ("4. Salir de sistema")
-				break
+				despedida()
 
 		else:
 			# No es un numero
-			print("Ingreso un valor no valido")
+			print("El valor ingresado no es un numero, intente de nuevo")
 			menu()
 	
 
 def saludo_inicial():
+	print("\n")
 	print("* --------------------------------------- *")
 	print("|                                         |")
 	print("|           Inicializando Sistema         |")
@@ -50,7 +54,19 @@ def saludo_inicial():
 	print("|              Cargando Datos             |")
 	print("|                                         |")
 	print("* --------------------------------------- *")
-	print("Inicializando sistema, por favor espere...")
+	print("Inicializando sistema, por favor espere...\n")
+
+
+def despedida():
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|          Saliendo del  Sistema          |")
+	print("|                                         |")
+	print("|             Guardando Datos             |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
 
 
 def opciones_de_menu():
@@ -58,16 +74,18 @@ def opciones_de_menu():
 	print("1. Registrar clientes nuevos")
 	print("2. Menu de Peliculas")
 	print("3. Consultar informacion")
-	print("4. Salir")
+	print("4. Salir\n")
 
 
 def es_un_numero(variable):
 
 	resultado = False
+	es_digito = variable.isdigit()
 
-    if type(variable) != int:
-    	return resultado
+	if es_digito != False:
+		resultado = True
 
+	return resultado
 
 ### Main
 def main():
