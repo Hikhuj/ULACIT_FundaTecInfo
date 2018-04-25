@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Curso: Fundamentos de Tecnologias de la Informacion
 # Proyecto: Sistema de Alquiler de Video
 # Profesor: Mario Segura
@@ -7,31 +8,45 @@
 # de aplicarlos con el idioma por lo que se planteo la conceptualizacion y desarrollo de un sistema que realice 
 # diferentes funciones basicas para ser aplicado a un Club de Video y poder llevar un control sobre 
 # las peliculas y los usuarios.
+# http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html
 
-#!/usr/bin/env python
-
-# Seccion de Importe de Archivos y Clases
-
-
-
-
-# Clases
-def main():
-
-	# Menu inicial
-
-	# Seccion principal de programa de python
-	menu()
-
+#  Funciones
 def menu():
-	# llamar a esta funcion
+	
+	# Variable permite que ingrese al ciclo
+	opcion_menu = 1
 
-	# mostras las opciones de menu
-	opciones_de_menu()
+	# Ciclo mantiene al usuario dentro del menu hasta que digite X numero y se salga
+	while opcion_menu >= 1 and opcion_menu <= 3:
 
-	# preguntar que opcion quiere hacer, se debe evaluar que funcion es
-		
+		# Funcion imprime opciones de menu
+		opciones_de_menu()
+
+		opcion_menu = input("Por favor ingrese una opcion (1-3): \n")
+
+		respuesta_es_numero = es_un_numero(opcion_menu)
+
+		if respuesta_es_numero == True:
+
+			opcion_menu = int(opcion_menu)
+
+			if opcion_menu == 1:
+				print("\n1. Registrar clientes nuevos\n")
+			elif opcion_menu == 2:
+			    print("\n2. Menu de peliculas\n")
+			elif opcion_menu == 3:
+				print("\n3. Consultar informacion\n")
+			else:
+				despedida()
+
+		else:
+			# No es un numero
+			print("El valor ingresado no es un numero, intente de nuevo")
+			menu()
+	
+
 def saludo_inicial():
+	print("\n")
 	print("* --------------------------------------- *")
 	print("|                                         |")
 	print("|           Inicializando Sistema         |")
@@ -39,22 +54,47 @@ def saludo_inicial():
 	print("|              Cargando Datos             |")
 	print("|                                         |")
 	print("* --------------------------------------- *")
-	print("Inicializando sistema, por favor espere...")
+	print("Inicializando sistema, por favor espere...\n")
+
+
+def despedida():
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|          Saliendo del  Sistema          |")
+	print("|                                         |")
+	print("|             Guardando Datos             |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
 
 
 def opciones_de_menu():
-	print("Por favor ingrese una opcion:")
-	print("1. BlaBla")
-	print("2. BlaBla")
-	print("3. BlaBla")
-	print("4. BlaBla")
-	print("5. BlaBla")
+	print("Opciones de Menu")
+	print("1. Registrar clientes nuevos")
+	print("2. Menu de Peliculas")
+	print("3. Consultar informacion")
+	print("4. Salir\n")
 
 
+def es_un_numero(variable):
 
+	resultado = False
+	es_digito = variable.isdigit()
 
-	
+	if es_digito != False:
+		resultado = True
 
+	return resultado
 
+### Main
+def main():
 
+	# Saludo Inicial
+	saludo_inicial()
 
+	# Desplegar menu de aplicacion
+	menu()
+
+if __name__ == "__main__":
+	main()
