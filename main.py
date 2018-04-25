@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Curso: Fundamentos de Tecnologias de la Informacion
 # Proyecto: Sistema de Alquiler de Video
 # Profesor: Mario Segura
@@ -7,36 +8,39 @@
 # de aplicarlos con el idioma por lo que se planteo la conceptualizacion y desarrollo de un sistema que realice 
 # diferentes funciones basicas para ser aplicado a un Club de Video y poder llevar un control sobre 
 # las peliculas y los usuarios.
+# http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html
 
-#!/usr/bin/env python
-
-# Seccion de Importe de Archivos y Clases
-
-
-
-
-# Clases
-def main():
-
-	# Saludo Inicial
-	saludo_inicial()
-
-	# Desplegar menu de aplicacion
-	menu()
-
-
+#  Funciones
 def menu():
-	# mostras las opciones de menu
+	
+	# Opciones de menu
 	opciones_de_menu()
 
-	# obtener opcion de menu
-	opcion_menu = int(input("Digite una opcion de menu"))
-	
-	
-	if is_int(opcion_menu) == True:
-		if opcion_menu >= 1 and opcion_menu <= 3
+	## Recibir opcion acorde a funcion anterior
+	opcion_menu = input('Por favor ingrese una opcion (1-4): ')
 
+	es_numero = es_un_numero(opcion_menu)
+
+	while es_numero == True:
 		
+		# Desplegar si opcion de menu es valido
+		if type(int(opcion_menu)) == int:
+
+			if int(opcion_menu) == 1:
+				print ("1. Registrar clientes nuevos")
+			elif int(opcion_menu) == 2:
+			    print ("2. Menu de peliculas")
+			elif int(opcion_menu) == 3:
+				print ("3. Consultar informacion")
+			else:
+				print ("4. Salir de sistema")
+				break
+
+		else:
+			# No es un numero
+			print("Ingreso un valor no valido")
+			menu()
+	
 
 def saludo_inicial():
 	print("* --------------------------------------- *")
@@ -49,7 +53,6 @@ def saludo_inicial():
 	print("Inicializando sistema, por favor espere...")
 
 
-
 def opciones_de_menu():
 	print("Opciones de Menu")
 	print("1. Registrar clientes nuevos")
@@ -59,13 +62,21 @@ def opciones_de_menu():
 
 
 def es_un_numero(variable):
-    if type(variable) == int:
-        return True
-    else:
-        if val.is_integer():
-            return True
-        else:
-            return False
+
+	resultado = False
+
+    if type(variable) != int:
+    	return resultado
 
 
+### Main
+def main():
 
+	# Saludo Inicial
+	saludo_inicial()
+
+	# Desplegar menu de aplicacion
+	menu()
+
+if __name__ == "__main__":
+	main()
