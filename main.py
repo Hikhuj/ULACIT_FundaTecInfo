@@ -127,6 +127,7 @@ def registrar_cliente_nuevo():
 	datos_cliente_nuevo[4] = int(input(keys_datos_cliente_nuevo[4]))
 	datos_cliente_nuevo[5] = input(keys_datos_cliente_nuevo[5])
 
+
 	return datos_cliente_nuevo
 
 
