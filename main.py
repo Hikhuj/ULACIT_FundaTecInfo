@@ -44,7 +44,9 @@ def menu():
 				# Volver a llamar al menu
 				menu()
 			elif opcion_menu == 2:
-			    print("2. Menu de peliculas\n")
+			    menu_peliculas_sistema()
+			    # Volver a llamar al menu
+				menu()
 			elif opcion_menu == 3:
 			    print("3. Consultar informacion\n")
 			else:
@@ -70,7 +72,8 @@ def saludo_inicial():
 	print("|              Cargando Datos             |")
 	print("|                                         |")
 	print("* --------------------------------------- *")
-	print("Inicializando sistema, por favor espere...\n")
+	print("Inicializando sistema, por favor espere....")
+	print("\n")
 
 
 def despedida():
@@ -96,11 +99,12 @@ def mensaje_registrar_cliente_nuevo():
 
 
 def opciones_de_menu():
-	print("Opciones de Menu")
+	print("*** MENU PRINCIPAL ***")
 	print("1. Registrar clientes nuevos")
 	print("2. Menu de Peliculas")
 	print("3. Consultar informacion")
-	print("4. Salir\n")
+	print("4. Salir")
+	print("\n")
 
 
 # Menu 1: Submenu 1
@@ -109,7 +113,7 @@ def opcion_registrar_cliente():
 	# VARIABLES
 	data_saved = True
 
-	# Mensaje de registro de cliente nuevo
+	# Desplegar Submenu 1
 	mensaje_registrar_cliente_nuevo()
 
 	# Se ingresa a funcion para crear datos de cliente
@@ -122,9 +126,28 @@ def opcion_registrar_cliente():
 
 	# Aviso de que se logra guardar datos o no
 	if data_saved == True:
-		print("Datos Guardados")
+		print("\nUsuario registrado exitosamente\n")
 	else:
-		print("Datos no guardados")
+		print("\nDatos no guardados\n")
+
+
+# Menu 1: Submenu 2
+def menu_peliculas_sistema():
+
+	# VARIABLES
+
+	# Desplegar Submenu 2
+	mensaje_menu_peliculas_sistema()
+
+
+def mensaje_menu_peliculas_sistema():
+
+	print("*** MENU DE PELICULAS ***")
+	print("1. Buscar pelicula")
+	print("2. Menu de Peliculas")
+	print("3. Consultar informacion")
+	print("4. Salir")
+	print("\n")
 
 
 def save_cliente_nuevo(lista):
@@ -136,7 +159,6 @@ def save_cliente_nuevo(lista):
 	# OPERACION
 	with open(url_db_usuarios, 'a', encoding='utf-8') as db_usuarios:
 	    db_usuarios.write("\n%s, %s, %s, %s, %s, %s, %s, %s" % (lista[0],lista[1],lista[2],lista[3],lista[4],lista[5],lista[6],lista[7]))
-
 
 	''' Version 2: Da errores, agregar cosas al final, no en nueva linea
 	with open(url_db_usuarios, 'a', encoding='utf-8') as db_usuarios:
@@ -166,8 +188,8 @@ def registrar_cliente_nuevo():
 	print("Ingrese los siguientes datos:")
 
 	datos_cliente_nuevo.insert(0, str(cliente_nuevo_id_cleaner()))
-	datos_cliente_nuevo.insert(1, input(keys_datos_cliente_nuevo[1]))
-	datos_cliente_nuevo.insert(2, input(keys_datos_cliente_nuevo[2]))
+	datos_cliente_nuevo.insert(1, cliente_nuevo_apellido_cleaner())
+	datos_cliente_nuevo.insert(2, cliente_nuevo_nombre_cleaner())
 	datos_cliente_nuevo.insert(3, str(cliente_nuevo_telefono_cleaner()))
 	datos_cliente_nuevo.insert(4, str(cliente_nuevo_tipo_telefono_cleaner()))
 	datos_cliente_nuevo.insert(5, input(keys_datos_cliente_nuevo[5]))
@@ -197,7 +219,38 @@ def keys_datos_cliente():
 def cliente_nuevo_id_cleaner():
 
 	resultado = random.randrange(10000000000)
+	return resultado
 
+
+def cliente_nuevo_apellido_cleaner():
+
+	# INICIALIZACION
+	keys_datos_cliente_nuevo = keys_datos_cliente()
+	resultado = ""
+
+	# OPERACIONES
+	apellido = input(keys_datos_cliente_nuevo[1])
+	inicial_apellido = apellido[0].upper()
+	resto_apellido = apellido[1:]
+	resultado = inicial_apellido + resto_apellido
+												
+	# RESULTADO
+	return resultado
+
+
+def cliente_nuevo_nombre_cleaner():
+
+	# INICIALIZACION
+	keys_datos_cliente_nuevo = keys_datos_cliente()
+	resultado = ""
+
+	# OPERACIONES
+	nombre = input(keys_datos_cliente_nuevo[2])	
+	inicial_nombre = nombre[0].upper()
+	resto_nombre = nombre[1:]
+	resultado = inicial_nombre + resto_nombre
+												
+	# RESULTADO
 	return resultado
 
 
