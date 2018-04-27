@@ -16,6 +16,16 @@ import csv
 # las peliculas y los clientes.
 # http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html
 
+
+def opciones_de_menu_principal():
+	print("*** MENU PRINCIPAL ***")
+	print("1. Registrar clientes nuevos")
+	print("2. Menu de Peliculas")
+	print("3. Consultar informacion")
+	print("4. Salir")
+	print("\n")
+
+
 #  Funciones
 def menu():
 	
@@ -26,13 +36,13 @@ def menu():
 	while opcion_menu >= 1 and opcion_menu <= 3:
 
 		# Funcion imprime opciones de menu
-		opciones_de_menu()
+		opciones_de_menu_principal()
 
 		# Evaluar si dato ingresado es valido en try:Except
 		try:
 			
 			# Capturar entrada de cliente (string)
-			opcion_menu = input("Por favor ingrese una opcion (1-3): ")
+			opcion_menu = input("Por favor ingrese una opcion (1-4): ")
 			print("\n")
 
 			# Tratar de convertir dato capturado a INT
@@ -46,9 +56,9 @@ def menu():
 			elif opcion_menu == 2:
 			    menu_peliculas_sistema()
 			    # Volver a llamar al menu
-				menu()
 			elif opcion_menu == 3:
 			    print("3. Consultar informacion\n")
+			    menu()
 			else:
 				despedida()
 
@@ -61,7 +71,131 @@ def menu():
 
 			# Volver a llamar al menu
 			menu()
+
+
+# Menu 1: Submenu 1
+def opcion_registrar_cliente():
 	
+	# VARIABLES
+	data_saved = True
+
+	# Desplegar Submenu 1
+	mensaje_registrar_cliente_nuevo()
+
+	# Se ingresa a funcion para crear datos de cliente
+	# Retorna una lista
+	lista_datos_cliente_nuevo = registrar_cliente_nuevo()
+
+	# Se agregan los datos de la lista a la base de datos de usuarios
+	# Retorna un booleano si logra
+	data_saved = save_cliente_nuevo(lista_datos_cliente_nuevo)
+
+	# Aviso de que se logra guardar datos o no
+	if data_saved == True:
+		print("\nUsuario registrado exitosamente\n")
+	else:
+		print("\nDatos no guardados\n")
+	
+
+def mensaje_menu_peliculas_sistema():
+
+	print("*** MENU DE PELICULAS ***")
+	print("1. Buscar pelicula")
+	print("2. Ingresar nueva pelicula")
+	print("3. Editar informacion de pelicula")
+	print("4. Volver al menu principal")
+	print("\n")
+
+
+# Menu 1: Submenu 2
+def menu_peliculas_sistema():
+
+	# INICIALIZACION
+	# Variable permite que ingrese al ciclo
+	opcion_menu = 1
+
+	# Ciclo mantiene al cliente dentro del menu hasta que digite X numero y se salga
+	while opcion_menu >= 1 and opcion_menu <= 3:
+
+		# Desplegar Submenu 2
+		mensaje_menu_peliculas_sistema()
+
+		# Evaluar si dato ingresado es valido en try:Except
+		try:
+			# Capturar entrada de cliente (string)
+			opcion_menu = input("Por favor ingrese una opcion (1-4): ")
+			print("\n")
+
+			# Tratar de convertir dato capturado a INT
+			opcion_menu = int(opcion_menu)
+
+			# Si opcion es validad pasar a entrar a submenus
+			if opcion_menu == 1:
+
+				buscar_pelicula_db_peliculas()
+				# Volver a llamar al menu
+				menu_peliculas_sistema()
+
+			elif opcion_menu == 2:
+
+			    # Volver a llamar al menu
+				menu_peliculas_sistema()
+
+			elif opcion_menu == 3:
+
+			    # Volver a llamar al menu
+			    menu_peliculas_sistema()
+
+			else:
+
+				# Devolverse a menu principal desde Submenu 2
+				menu()
+
+		except ValueError:
+
+			# Mostrar error: cliente no ingreso numero
+			print("\n")
+			print("El valor ingresado no es un numero, intente de nuevo")
+			print("\n")
+
+			# Volver a llamar al menu
+			menu_peliculas_sistema()
+
+
+def buscar_pelicula_db_peliculas():
+
+	id_pelicula = input("Ingrese el id de pelicula (id de 5 numeros: #####): ")
+
+	id_existe = buscar_id_pelicula_en_db(id_pelicula)
+
+	print(id_existe)
+
+
+
+def buscar_id_pelicula_en_db(id_pelicula):
+
+	'''
+		Funcion recibe id de pelicula
+		Busca id de pelicula en el CSV
+		Si existe, retorna True
+		De otro modo, si no existe, retorna False
+	'''
+
+	# INICIALIZACION
+	resultado = False
+	url_db_peliculas = "peliculas.csv"
+
+	# OPERACION
+	with open(url_db_peliculas, 'r', encoding='utf-8', newline='') as db_peliculas:
+		archivo = csv.reader(db_peliculas, delimiter=',', quotechar=',')
+		for linea in archivo:
+			if linea[0] == id_pelicula:
+				resultado = True
+				print(linea[0])
+				break
+
+	return resultado
+
 
 def saludo_inicial():
 	print("\n")
@@ -98,58 +232,6 @@ def mensaje_registrar_cliente_nuevo():
 	print("\n")
 
 
-def opciones_de_menu():
-	print("*** MENU PRINCIPAL ***")
-	print("1. Registrar clientes nuevos")
-	print("2. Menu de Peliculas")
-	print("3. Consultar informacion")
-	print("4. Salir")
-	print("\n")
-
-
-# Menu 1: Submenu 1
-def opcion_registrar_cliente():
-	
-	# VARIABLES
-	data_saved = True
-
-	# Desplegar Submenu 1
-	mensaje_registrar_cliente_nuevo()
-
-	# Se ingresa a funcion para crear datos de cliente
-	# Retorna una lista
-	lista_datos_cliente_nuevo = registrar_cliente_nuevo()
-
-	# Se agregan los datos de la lista a la base de datos de usuarios
-	# Retorna un booleano si logra
-	data_saved = save_cliente_nuevo(lista_datos_cliente_nuevo)
-
-	# Aviso de que se logra guardar datos o no
-	if data_saved == True:
-		print("\nUsuario registrado exitosamente\n")
-	else:
-		print("\nDatos no guardados\n")
-
-
-# Menu 1: Submenu 2
-def menu_peliculas_sistema():
-
-	# VARIABLES
-
-	# Desplegar Submenu 2
-	mensaje_menu_peliculas_sistema()
-
-
-def mensaje_menu_peliculas_sistema():
-
-	print("*** MENU DE PELICULAS ***")
-	print("1. Buscar pelicula")
-	print("2. Menu de Peliculas")
-	print("3. Consultar informacion")
-	print("4. Salir")
-	print("\n")
-
-
 def save_cliente_nuevo(lista):
 	
 	# INICIALIZACION
@@ -166,7 +248,6 @@ def save_cliente_nuevo(lista):
 	                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
 	    escritura.writerows(lista)
 	'''
-
 
 	''' Version 1: Da errores
 	with open(url_db_usuarios) as archivo:
@@ -230,6 +311,7 @@ def cliente_nuevo_apellido_cleaner():
 
 	# OPERACIONES
 	apellido = input(keys_datos_cliente_nuevo[1])
+	apellido = apellido.lower()
 	inicial_apellido = apellido[0].upper()
 	resto_apellido = apellido[1:]
 	resultado = inicial_apellido + resto_apellido
@@ -245,7 +327,8 @@ def cliente_nuevo_nombre_cleaner():
 	resultado = ""
 
 	# OPERACIONES
-	nombre = input(keys_datos_cliente_nuevo[2])	
+	nombre = input(keys_datos_cliente_nuevo[2])
+	nombre = nombre.lower()
 	inicial_nombre = nombre[0].upper()
 	resto_nombre = nombre[1:]
 	resultado = inicial_nombre + resto_nombre
@@ -254,11 +337,14 @@ def cliente_nuevo_nombre_cleaner():
 	return resultado
 
 
+'''
+	Debo revisar esta funcion, almacena un telefono 0, y debe ser el recibido por el usuario
+'''
 def cliente_nuevo_telefono_cleaner():
 
 	# INICIALIZACION
 	keys_datos_cliente_nuevo = keys_datos_cliente()
-	resultado = 00000000
+	resultado = 0
 
 	# OPERACIONES
 	telefono = input(keys_datos_cliente_nuevo[3])
@@ -270,7 +356,7 @@ def cliente_nuevo_telefono_cleaner():
 			print("El valor ingresado no es un numero, intente de nuevo\n")
 			print("\n")
 			cliente_nuevo_telefono_cleaner()
-	else:
+	else: 
 		print("\n")
 		print("El telefono no tiene 8 digitos y/o contiene letras o simbolos, intente de nuevo.\n")
 		cliente_nuevo_telefono_cleaner()
@@ -294,7 +380,7 @@ def cliente_nuevo_tipo_telefono_cleaner():
 				resultado = resultado
 			else:
 				print("\n")
-				print("El tipo de telefono no es valido y/o contiene letras o simbolos, intente de nuevo.\n")
+				print("La opcion no existe, ingrese una opcion valida\n")
 				cliente_nuevo_telefono_cleaner()
 		except ValueError:
 			print("\n")

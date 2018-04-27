@@ -1,4 +1,5 @@
-﻿9044526861,Astin,Shavez,22503745,2,petersko@outlook.com, False, False
+﻿id,apellido,nombre,telefono_primario,telefono_tipo,email,estado_cliente,peliculas_rentadas
+9044526861,Astin,Shavez,22503745,2,petersko@outlook.com, False, False
 9044852026,Walker,Aubrey,22508589,3,openldap@outlook.com, False, False
 9044054379,Johnson,Khamesha,22507272,2,uqmcolyv@optonline.net, False, False
 3058107878,Lipford,Georgette,22508257,3,iamcal@icloud.com, True, False
@@ -22,5 +23,9 @@
 9047167334,Charles,Ashley,29908589,3,granboul@optonline.net, True, False
 1606279531, srhg, ssrx,12345678,2, roger@ulate, True, False
 4173384750, Fe1, Aekegv,12345678,1, roger.p.designe357@gmail.com, True, False
-1034899185, Ulate, Priscilla, 12345678, 2, roger.p.designe357@gmail.com, True, False
-8871660687, Rivera, Priscilla, 12345678, 3, priscilla@ulate.com, True, False
+1034899185, Ulate, Priscilla,12345678,2, roger.p.designe357@gmail.com, True, False
+8871660687, Rivera, Priscilla,12345678,3, priscilla@ulate.com, True, False
+4010291449, Vergana te lechea, Sergio,0,2, sergioTeLechea@vergara.com, True, False
+6568415703, Agsrb, Svtcjytr,0,1, roger@las, True, False
+6817085352, Asrsb, Srbdtb,0,1, ro@ulate, True, False
+1658730922, Kjafgaf, Lkshefioe, None, 1, roger@ulate, True, False
