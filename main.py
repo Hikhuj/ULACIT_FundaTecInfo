@@ -26,13 +26,13 @@ def menu():
 	while opcion_menu >= 1 and opcion_menu <= 3:
 
 		# Funcion imprime opciones de menu
-		opciones_de_menu()
+		opciones_de_menu_principal()
 
 		# Evaluar si dato ingresado es valido en try:Except
 		try:
 			
 			# Capturar entrada de cliente (string)
-			opcion_menu = input("Por favor ingrese una opcion (1-3): ")
+			opcion_menu = input("Por favor ingrese una opcion (1-4): ")
 			print("\n")
 
 			# Tratar de convertir dato capturado a INT
@@ -98,7 +98,7 @@ def mensaje_registrar_cliente_nuevo():
 	print("\n")
 
 
-def opciones_de_menu():
+def opciones_de_menu_principal():
 	print("*** MENU PRINCIPAL ***")
 	print("1. Registrar clientes nuevos")
 	print("2. Menu de Peliculas")
@@ -134,19 +134,61 @@ def opcion_registrar_cliente():
 # Menu 1: Submenu 2
 def menu_peliculas_sistema():
 
-	# VARIABLES
+	# INICIALIZACION
+	# Variable permite que ingrese al ciclo
+	opcion_menu = 1
 
-	# Desplegar Submenu 2
-	mensaje_menu_peliculas_sistema()
+	# Ciclo mantiene al cliente dentro del menu hasta que digite X numero y se salga
+	while opcion_menu >= 1 and opcion_menu <= 3:
+
+		# Desplegar Submenu 2
+		mensaje_menu_peliculas_sistema()
+
+		# Evaluar si dato ingresado es valido en try:Except
+		try:
+			
+			# Capturar entrada de cliente (string)
+			opcion_menu = input("Por favor ingrese una opcion (1-4): ")
+			print("\n")
+
+			# Tratar de convertir dato capturado a INT
+			opcion_menu = int(opcion_menu)
+
+			# Si opcion es validad pasar a entrar a submenus
+			if opcion_menu == 1:
+				
+				# Volver a llamar al menu
+				menu_peliculas_sistema()
+			elif opcion_menu == 2:
+
+			    # Volver a llamar al menu
+				menu_peliculas_sistema()
+			elif opcion_menu == 3:
+
+			    # Volver a llamar al menu
+			    menu_peliculas_sistema()
+			else:
+				# Devolverse a menu principal desde Submenu 2
+				menu()
+
+		except ValueError:
+
+			# Mostrar error: cliente no ingreso numero
+			print("\n")
+			print("El valor ingresado no es un numero, intente de nuevo")
+			print("\n")
+
+			# Volver a llamar al menu
+			menu_peliculas_sistema()
 
 
 def mensaje_menu_peliculas_sistema():
 
 	print("*** MENU DE PELICULAS ***")
 	print("1. Buscar pelicula")
-	print("2. Menu de Peliculas")
-	print("3. Consultar informacion")
-	print("4. Salir")
+	print("2. Ingresar nueva pelicula")
+	print("3. Editar informacion de pelicula")
+	print("4. Volver al menu principal")
 	print("\n")
 
 
@@ -166,7 +208,6 @@ def save_cliente_nuevo(lista):
 	                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
 	    escritura.writerows(lista)
 	'''
-
 
 	''' Version 1: Da errores
 	with open(url_db_usuarios) as archivo:
