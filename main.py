@@ -18,7 +18,7 @@ import csv
 
 
 def opciones_de_menu_principal():
-	print("*** MENU PRINCIPAL ***")
+	mensaje_menu_principal()
 	print("1. Registrar clientes nuevos")
 	print("2. Menu de Peliculas")
 	print("3. Consultar informacion")
@@ -33,7 +33,7 @@ def menu():
 	opcion_menu = 1
 
 	# Ciclo mantiene al cliente dentro del menu hasta que digite X numero y se salga
-	while opcion_menu >= 1 and opcion_menu <= 3:
+	while opcion_menu >= 1 and opcion_menu <= 4:
 
 		# Funcion imprime opciones de menu
 		opciones_de_menu_principal()
@@ -50,17 +50,23 @@ def menu():
 
 			# Si opcion es validad pasar a entrar a submenus
 			if opcion_menu == 1:
+
 				opcion_registrar_cliente()
 				# Volver a llamar al menu
 				menu()
+
 			elif opcion_menu == 2:
-			    menu_peliculas_sistema()
-			    # Volver a llamar al menu
+
+			    function_menu_peliculas_sistema()
+
 			elif opcion_menu == 3:
-			    print("3. Consultar informacion\n")
-			    menu()
+
+				consultar_informacion_menu()
+			    # Volver a llamar al menu
+				menu()
 			else:
 				despedida()
+				break
 
 		except ValueError:
 
@@ -97,9 +103,15 @@ def opcion_registrar_cliente():
 		print("\nDatos no guardados\n")
 	
 
-def mensaje_menu_peliculas_sistema():
+def mensaje_function_menu_peliculas_sistema():
 
-	print("*** MENU DE PELICULAS ***")
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|             MENU DE PELICULAS           |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
 	print("1. Buscar pelicula")
 	print("2. Ingresar nueva pelicula")
 	print("3. Editar informacion de pelicula")
@@ -108,7 +120,7 @@ def mensaje_menu_peliculas_sistema():
 
 
 # Menu 1: Submenu 2
-def menu_peliculas_sistema():
+def function_menu_peliculas_sistema():
 
 	# INICIALIZACION
 	# Variable permite que ingrese al ciclo
@@ -118,7 +130,7 @@ def menu_peliculas_sistema():
 	while opcion_menu >= 1 and opcion_menu <= 3:
 
 		# Desplegar Submenu 2
-		mensaje_menu_peliculas_sistema()
+		mensaje_function_menu_peliculas_sistema()
 
 		# Evaluar si dato ingresado es valido en try:Except
 		try:
@@ -132,19 +144,20 @@ def menu_peliculas_sistema():
 			# Si opcion es validad pasar a entrar a submenus
 			if opcion_menu == 1:
 
-				buscar_pelicula_db_peliculas()
-				# Volver a llamar al menu
-				menu_peliculas_sistema()
+				# Opcion 1: Buscar una pelicula
+				function_buscar_peliculas()
+				# Volver a llamar al menu de peliculas
+				function_menu_peliculas_sistema()
 
 			elif opcion_menu == 2:
 
-			    # Volver a llamar al menu
-				menu_peliculas_sistema()
+				# Opcion 2: Ingresar nueva pelicula
+				function_agregar_nueva_pelicula()
 
 			elif opcion_menu == 3:
 
 			    # Volver a llamar al menu
-			    menu_peliculas_sistema()
+			    function_menu_peliculas_sistema()
 
 			else:
 
@@ -159,17 +172,109 @@ def menu_peliculas_sistema():
 			print("\n")
 
 			# Volver a llamar al menu
-			menu_peliculas_sistema()
+			function_menu_peliculas_sistema()
 
 
-def buscar_pelicula_db_peliculas():
+def function_agregar_nueva_pelicula():
+
+	resultado = function_buscar_peliculas_return()
+
+	if resultado == True:
+		print("")
+		print("La pelicula que busca ya existe, debera buscar otra.")
+		print("")
+		opcion_usuario = int(input("Presione 1 para buscar de nuevo o bien 0 para salir: "))
+		if opcion_usuario >= 0 and opcion_usuario <= 1:
+			if opcion_usuario == 1:
+				function_agregar_nueva_pelicula()
+			else:
+				menu()
+		else:
+			print("")
+			print("Ingreso un valor no valido, volviendo a la opcion Ingresar nueva película")
+			print("")
+			function_agregar_nueva_pelicula()
+	else:
+		print("")
+		datos_nueva_pelicula_listos = function_registrar_pelicula_nueva()
+		save_pelicula_nueva(datos_nueva_pelicula_listos)
+		print("")
+		print("Pelicula guardada exitosamente")
+		print("")
+
+
+def function_registrar_pelicula_nueva():
+
+	# INICIALIZACION
+	datos_pelicula_nueva = []
+
+	print("Ingrese los siguientes datos de la pelicula nueva:")
+
+	datos_pelicula_nueva.insert(0, str(pelicula_nueva_id_cleaner()))
+	datos_pelicula_nueva.insert(1, pelicula_nueva_nombre_cleaner())
+	datos_pelicula_nueva.insert(2, pelicula_nueva_sinopsis_cleaner())
+	datos_pelicula_nueva.insert(3, str(pelicula_nueva_tipoDisco_cleaner()))
+	datos_pelicula_nueva.insert(4, str(pelicula_nueva_estadoPelicula_cleaner()))
+
+	return datos_pelicula_nueva
+
+def function_buscar_peliculas_return():
+
+	resultado = False
 
 	id_pelicula = input("Ingrese el id de pelicula (id de 5 numeros: #####): ")
 
-	id_existe = buscar_id_pelicula_en_db(id_pelicula)
+	resultado = buscar_id_pelicula_en_db_return(id_pelicula)
 
-	print(id_existe)
+	return resultado
 
+	print("\n")
+
+
+def buscar_id_pelicula_en_db_return(id_pelicula):
+
+	'''
+		Funcion recibe id de pelicula
+		Busca id de pelicula en el CSV
+		Si existe, retorna True
+		De otro modo, si no existe, retorna False
+	'''
+
+	# INICIALIZACION
+	lista_headers_peliculas = headers_peliculas_sistema()
+	url_db_peliculas = "peliculas.csv"
+	pelicula_encontrada = False
+
+	# OPERACION
+	with open(url_db_peliculas, 'r', encoding='utf-8', newline='') as db_peliculas:
+		archivo = csv.reader(db_peliculas, delimiter=',')
+		for linea in archivo:
+			if linea[0] == id_pelicula:
+				pelicula_encontrada = True
+				break
+
+	return pelicula_encontrada
+
+def save_pelicula_nueva(lista):
+	
+	# INICIALIZACION
+	resultado = True
+	url_db_peliculas = "peliculas.csv"
+
+	# OPERACION
+	with open(url_db_peliculas, 'a', encoding='utf-8') as db_peliculas:
+	    db_peliculas.write("\n%s, %s, %s, %s, %s" % (lista[0],lista[1],lista[2],lista[3],lista[4]))
+
+	return resultado
+
+
+def function_buscar_peliculas():
+
+	id_pelicula = input("Ingrese el id de pelicula (id de 5 numeros: #####): ")
+
+	buscar_id_pelicula_en_db(id_pelicula)
+
+	print("\n")
 
 def buscar_id_pelicula_en_db(id_pelicula):
 
@@ -181,19 +286,43 @@ def buscar_id_pelicula_en_db(id_pelicula):
 	'''
 
 	# INICIALIZACION
-	resultado = False
+	lista_headers_peliculas = headers_peliculas_sistema()
 	url_db_peliculas = "peliculas.csv"
+	pelicula_encontrada = False
+	mensaje_alerta = "\nNo se encuentra la pelicula\n"
 
 	# OPERACION
 	with open(url_db_peliculas, 'r', encoding='utf-8', newline='') as db_peliculas:
-		archivo = csv.reader(db_peliculas, delimiter=',', quotechar=',')
+		archivo = csv.reader(db_peliculas, delimiter=',')
 		for linea in archivo:
 			if linea[0] == id_pelicula:
-				resultado = True
-				print(linea[0])
+				for indice in range(len(linea)):
+					if indice == 3:
+						if int(linea[indice]) == 1:
+							print(lista_headers_peliculas[indice] + "DVD-ROM")
+						else:
+							print(lista_headers_peliculas[indice] + "Blueray Disc")
+
+					elif indice == 4:
+						if int(linea[indice]) == 1:
+							print(lista_headers_peliculas[indice] + "Usuario Activo")
+						else:
+							print(lista_headers_peliculas[indice] + "Usuario No Activo")
+					else:
+						print(lista_headers_peliculas[indice] + linea[indice])
+				pelicula_encontrada = True
 				break
 
-	return resultado
+		if pelicula_encontrada != True:
+			print(mensaje_alerta)
+
+
+def headers_peliculas_sistema():
+
+	# Datos de cliente
+	keys_db_peliculas_sistema = ["Id de Pelicula: ", "Nombre de Pelicula: ", "Sinopsis de Pelicula: ", "Tipo de disco de la pelicula: ", "Estado de pelicula: "]
+
+	return keys_db_peliculas_sistema
 
 
 def saludo_inicial():
@@ -226,6 +355,36 @@ def mensaje_registrar_cliente_nuevo():
 	print("* --------------------------------------- *")
 	print("|                                         |")
 	print("|         REGISTRAR CLIENTE NUEVO         |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
+
+
+def mensaje_menu_peliculas():
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|            MENU DE PELICULAS            |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
+
+
+def mensaje_menu_informacion_cliente():
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|       INFORMACION DE LOS CLIENTES       |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
+
+
+def mensaje_menu_principal():
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|              MENU PRINCIPAL             |")
 	print("|                                         |")
 	print("* --------------------------------------- *")
 	print("\n")
@@ -265,7 +424,7 @@ def registrar_cliente_nuevo():
 	datos_cliente_nuevo = []
 	keys_datos_cliente_nuevo = keys_datos_cliente()
 
-	print("Ingrese los siguientes datos:")
+	print("Ingrese los siguientes datos del nuevo cliente:")
 
 	datos_cliente_nuevo.insert(0, str(cliente_nuevo_id_cleaner()))
 	datos_cliente_nuevo.insert(1, cliente_nuevo_apellido_cleaner())
@@ -289,16 +448,139 @@ def keys_datos_cliente():
 							"Telefono Principal de Cliente: ",
 							"Tipo de telefono de Cliente (1 = Movil, 2 = Hogar, 3 = Trabajo): ",
 							"Correo Electronico de Cliente: ",
-							"Estado de Cliente (1 = Activo, 0 = No Activo): "
+							"Estado de Cliente (1 = Activo, 0 = No Activo): ",
 							"El cliente tiene peliculas rentadas"
 							)
 
 	return keys_datos_cliente
 
 
+def keys_datos_pelicula():
+
+	# Datos de pelicula
+	keys_datos_pelicula = (
+							"Numero de identificación de película: ",
+							"Nombre de película: ",
+							"Descripción de película: ",
+							"Tipo de disco (Ingrese 1 para DVD-ROM o bien 2 para Blueray Disc): ",
+							"La película está rentada? (1 para si, 0 para no): "
+							)
+
+	return keys_datos_pelicula
+
+
 def cliente_nuevo_id_cleaner():
 
 	resultado = random.randrange(10000000000)
+	return resultado
+
+
+def pelicula_nueva_id_cleaner():
+
+	# INICIALIZACION
+	keys_datos_pelicula_nueva = keys_datos_pelicula()
+	resultado = 0
+
+	# OPERACIONES
+	try:
+		id_de_pelicula = input(keys_datos_pelicula_nueva[0])
+		if len(id_de_pelicula) == 5:
+			resultado = int(id_de_pelicula)
+	except Exception as e:
+		print("")
+		print("El id no tiene 5 digitos o bien ingreso una letra")
+		print("")
+		pelicula_nueva_id_cleaner()
+
+	# RESULTADO
+	return resultado
+
+
+def pelicula_nueva_nombre_cleaner():
+
+	# INICIALIZACION
+	keys_datos_pelicula_nueva = keys_datos_pelicula()
+	resultado = ""
+
+	# OPERACIONES
+	resultado = input(keys_datos_pelicula_nueva[1])
+
+	# RESULTADO
+	return resultado
+
+
+def pelicula_nueva_sinopsis_cleaner():
+
+	# INICIALIZACION
+	keys_datos_pelicula_nueva = keys_datos_pelicula()
+	resultado = ""
+
+	# OPERACIONES
+	resultado = input(keys_datos_pelicula_nueva[2])
+
+	# RESULTADO
+	return resultado
+
+
+def pelicula_nueva_tipoDisco_cleaner():
+
+	# INICIALIZACION
+	keys_datos_pelicula_nueva = keys_datos_pelicula()
+	resultado = 0
+
+	# OPERACIONES
+	tipo_disco = input(keys_datos_pelicula_nueva[3])
+	if len(tipo_disco) == 1:
+		try:
+			resultado = int(tipo_disco)
+			if resultado >= 1 and resultado <= 2:
+				resultado = resultado
+			else:
+				print("\n")
+				print("La opcion no existe, ingrese una opcion valida\n")
+				pelicula_nueva_tipoDisco_cleaner()
+		except ValueError:
+			print("\n")
+			print("El valor ingresado no es un numero, intente de nuevo\n")
+			print("\n")
+			pelicula_nueva_tipoDisco_cleaner()
+	else:
+		print("\n")
+		print("Solo puede ser un valor numerico, intente de nuevo.\n")
+		pelicula_nueva_tipoDisco_cleaner()
+												
+	# RESULTADO
+	return resultado
+
+
+def pelicula_nueva_estadoPelicula_cleaner():
+
+	# INICIALIZACION
+	keys_datos_pelicula_nueva = keys_datos_pelicula()
+	resultado = 0
+
+	# OPERACIONES
+	estado_pelicula = input(keys_datos_pelicula_nueva[4])
+	if len(estado_pelicula) == 1:
+		try:
+			resultado = int(estado_pelicula)
+			if resultado >= 0 and resultado <= 1:
+				resultado = resultado
+			else:
+				print("\n")
+				print("La opcion no existe, ingrese una opcion valida\n")
+				pelicula_nueva_estadoPelicula_cleaner()
+		except ValueError:
+			print("\n")
+			print("El valor ingresado no es un numero, intente de nuevo\n")
+			print("\n")
+			pelicula_nueva_estadoPelicula_cleaner()
+	else:
+		print("\n")
+		print("Solo puede ser un digito, intente de nuevo.\n")
+		pelicula_nueva_estadoPelicula_cleaner()
+												
+	# RESULTADO
 	return resultado
 
 
@@ -335,31 +617,19 @@ def cliente_nuevo_nombre_cleaner():
 	# RESULTADO
 	return resultado
 
-# Branch.
 
-
-'''
-	Debo revisar esta funcion, almacena un telefono 0, y debe ser el recibido por el usuario
-'''
 def cliente_nuevo_telefono_cleaner():
 
 	# INICIALIZACION
 	keys_datos_cliente_nuevo = keys_datos_cliente()
-	resultado = 0
+	resultado = ""
 
 	# OPERACIONES
-	telefono = input(keys_datos_cliente_nuevo[3])
-	if len(telefono) == 8:
-		try:
-			resultado = int(telefono)
-		except ValueError:
-			print("\n")
-			print("El valor ingresado no es un numero, intente de nuevo\n")
-			print("\n")
-			cliente_nuevo_telefono_cleaner()
-	else: 
-		print("\n")
-		print("El telefono no tiene 8 digitos y/o contiene letras o simbolos, intente de nuevo.\n")
+	try:
+		telefono = int(input(keys_datos_cliente_nuevo[3]))
+		resultado = telefono
+	except Exception as e:
+		print("El valor ingresado no es un numero, intente de nuevo\n")
 		cliente_nuevo_telefono_cleaner()
 												
 	# RESULTADO
@@ -402,6 +672,208 @@ def imprimir_listas(lista):
 	for x in lista:
 		print(x, end="")
 		print(", ")
+
+
+
+######## DANIEL MORA ############
+
+def consulta_menu():
+	
+	print("\n")
+	print("* --------------------------------------- *")
+	print("|                                         |")
+	print("|         CONSULTA DE INFORMACION         |")
+	print("|                                         |")
+	print("* --------------------------------------- *")
+	print("\n")
+	print ("En este menu puede consultar la cantidad de usuarios o peliculas en el sistema,\tasi como un usuario o una pelicula en especifico.")
+	print ('\n')
+	print ("1. Consultar Usuarios")
+	print ("2. Cantidad de Usuarios")
+	print ("3. Consultar Peliculas")
+	print ("4. Cantidad de Peliculas")
+	print ("5. Salir")
+	print ("\n")
+
+
+def revisarUsuario(lista, busqueda):
+	resultado = [] #devolverá false por defecto si no encuentra un dato
+	header = [
+				"Numero de Cedula: ",
+				"Apellido: ",
+			 	"Nombre: ",
+			 	"Telefono: ",
+				"Tipo de Telefono: ",
+				"Correo Electronico: ",
+				"Estado: ",
+				"Tiene peliculas: "
+				]
+	usuario_encontrado = False
+	mensaje_alerta = "\nNo se encuentro usuario.\n"
+
+	for row in lista:
+		if row[0] == busqueda:
+			#si encuentra el dato en alguna linea de esa lista, se cambia el resultado a esa linea
+			lista_usuario = row
+			print("")
+			print("Usuario encontrado!: ")
+			print(" ")
+
+			'''
+			for indice in range(len(linea)):
+				if indice == 3:
+					if int(linea[indice]) == 1:
+						print(lista_headers_peliculas[indice] + "DVD-ROM")
+					else:
+						print(lista_headers_peliculas[indice] + "Blueray Disc")
+			'''
+
+			for indice in range(len(lista_usuario)):
+				if indice == 3:
+					if int(lista_usuario[indice]) == 1:
+						print(header[indice] + "DVD-ROM")
+					else:
+						print(header[indice] + "Blueray Disc")
+
+				elif indice == 4:
+					if int(lista_usuario[indice]) == 1:
+						print(header[indice] + "Usuario Activo")
+					else:
+						print(header[indice] + "Usuario No Activo")
+				else:
+					print(header[indice] + lista_usuario[indice])
+			usuario_encontrado = True
+			'''
+				elif indice == 4:
+					if int(linea[indice]) == 1:
+						print(lista_headers_peliculas[indice] + "Usuario Activo")
+					else:
+						print(lista_headers_peliculas[indice] + "Usuario No Activo")
+				else:
+					print(lista_headers_peliculas[indice] + linea[indice])
+			pelicula_encontrada = True
+			break
+			'''
+			break
+
+	if usuario_encontrado != True:
+		print(mensaje_alerta)
+
+
+def revisarPelicula(listapeli, code):
+	resultado = [] #devolverá false por defecto si no encuentra un dato
+	header2 = [
+				"Codigo de Pelicula: ",
+				"Nombre: ",
+				"Director: ",
+				"Tipo de Disco: ",
+				"Descripcion: ",
+				"Estado de Disco: "
+				]
+	pelicula_encontrada = False
+	mensaje_alerta = "\nNo se encuentra la pelicula.\n"
+
+	for row in listapeli:
+		if row[0] == code:
+			#si encuentra el dato en alguna linea de esa lista, se cambia el resultado a esa linea
+			lista_pelicula = row
+			print("")
+			print("Pelicula encontrada!: ")
+			print(" ")
+
+			for indice in range(len(lista_pelicula)):
+				print(header2[indice], ": ", lista_pelicula[indice])
+				pelicula_encontrada = True
+			break
+	
+		else:
+			pelicula_encontrada
+
+
+	if pelicula_encontrada != True:
+		print(mensaje_alerta)
+
+
+def consultar_informacion_menu():
+
+	header = [
+				"Numero de Cedula",
+				"Apellido",
+			 	"Nombre",
+			 	"Telefono",
+				"Tipo de Telefono",
+				"Correo Electronico",
+				"Estado",
+				"Tiene peliculas"
+				]
+
+	header2 = [
+				"Codigo de Pelicula",
+				"Nombre",
+				"Director",
+				"Tipo de Disco",
+				"Descripcion",
+				"Estado de Disco"
+				]
+
+	while consulta_menu() != "5":
+		choice = int(input("Introduzca un numero entre 1 y 5:\n"))
+
+		if choice == 1:
+			print ("* --------------------------------------- *")
+			print ("|         Consulta de Usuarios            *")
+			print ("* --------------------------------------- *")
+			print ("\n")
+
+			number = input("Ingrese un numero de cedula:\n")
+
+			csvfile = open("usuarios.csv") #se lee el archivo en texto
+			lista = csv.reader(csvfile, delimiter=",", quotechar= "|") #se pasa a una lista de listas
+
+			revisarUsuario(lista, number) #dato será lo que retorne la funcion de revisar dato con la lista de usuarios y lo que se ingreso como argumento
+
+		elif choice == 2:
+			print ("* --------------------------------------- *")
+			print ("|         Cantidad de Usuarios            *")
+			print ("* --------------------------------------- *")
+			print ("\n")
+
+			f = open ("usuarios.csv", "r")
+			reader = csv.reader(f,delimiter = ",")
+			value = len(list(reader))
+
+			print ("\nEl sistema contiene actualmente con " + str(value) + " usuarios\n")
+
+		elif choice == 3:
+			print ("* --------------------------------------- *")
+			print ("|         Consulta de Peliculas           *")
+			print ("* --------------------------------------- *")
+			print ("\n")
+
+			code = input("Ingrese un numero de identificacion de pelicula (5 digitos):\n")
+
+			csvfile2 = open("peliculas.csv") #se lee el archivo en texto
+			listapeli = csv.reader(csvfile2, delimiter=",", quotechar= "|") #se pasa a una lista de listas
+
+			revisarPelicula(listapeli, code) #dato será lo que retorne la funcion de revisar dato con la lista de usuarios y lo que se ingreso como argumento
+
+		elif choice == 4:
+			print ("* --------------------------------------- *")
+			print ("|         Cantidad de Peliculas           *")
+			print ("* --------------------------------------- *")
+			print ("\n")
+
+			f = open ("peliculas.csv", "r")
+			reader = csv.reader(f,delimiter = ",")
+			value = len(list(reader))
+
+			print ("El sistema contiene actualmente con " + str(value) + " peliculas")
+
+		elif choice == 5:
+			menu()
+
+		else:
+			print ("\nPor favor introduzca una opcion valida")
 
 
 ### Main
