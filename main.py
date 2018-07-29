@@ -171,7 +171,6 @@ def buscar_pelicula_db_peliculas():
 	print(id_existe)
 
 
-
 def buscar_id_pelicula_en_db(id_pelicula):
 
 	'''
