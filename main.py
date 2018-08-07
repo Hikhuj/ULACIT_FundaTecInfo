@@ -4,6 +4,7 @@
 # Importe de modulos
 import random
 import csv
+import sys
 
 # Curso: Fundamentos de Tecnologias de la Informacion
 # Proyecto: Sistema de Alquiler de Video
@@ -33,7 +34,7 @@ def menu():
 	opcion_menu = 1
 
 	# Ciclo mantiene al cliente dentro del menu hasta que digite X numero y se salga
-	while opcion_menu >= 1 and opcion_menu <= 4:
+	while opcion_menu >= 1 and opcion_menu < 4:
 
 		# Funcion imprime opciones de menu
 		opciones_de_menu_principal()
@@ -48,31 +49,29 @@ def menu():
 			# Tratar de convertir dato capturado a INT
 			opcion_menu = int(opcion_menu)
 
-			# Si opcion es validad pasar a entrar a submenus
+			# Si opcion es valida, ingresar a submenus
 			if opcion_menu == 1:
-
 				opcion_registrar_cliente()
 				# Volver a llamar al menu
 				menu()
 
 			elif opcion_menu == 2:
-
 			    function_menu_peliculas_sistema()
 
 			elif opcion_menu == 3:
-
 				consultar_informacion_menu()
 			    # Volver a llamar al menu
 				menu()
+
 			else:
 				despedida()
-				break
+				sys.exit(1)
 
 		except ValueError:
 
 			# Mostrar error: cliente no ingreso numero
 			print("\n")
-			print("El valor ingresado no es un numero, intente de nuevo")
+			print("Valor u opción no valida, intente de nuevo")
 			print("\n")
 
 			# Volver a llamar al menu
@@ -85,7 +84,6 @@ def opcion_registrar_cliente():
 	# VARIABLES
 	data_saved = True
 
-	# Desplegar Submenu 1
 	mensaje_registrar_cliente_nuevo()
 
 	# Se ingresa a funcion para crear datos de cliente
@@ -292,7 +290,7 @@ def buscar_id_pelicula_en_db(id_pelicula):
 	mensaje_alerta = "\nNo se encuentra la pelicula\n"
 
 	# OPERACION
-	with open(url_db_peliculas, 'r', encoding='utf-8', newline='') as db_peliculas:
+	with open(url_db_peliculas, 'r', encoding='utf-8') as db_peliculas:
 		archivo = csv.reader(db_peliculas, delimiter=',')
 		for linea in archivo:
 			if linea[0] == id_pelicula:
@@ -308,6 +306,7 @@ def buscar_id_pelicula_en_db(id_pelicula):
 							print(lista_headers_peliculas[indice] + "Usuario Activo")
 						else:
 							print(lista_headers_peliculas[indice] + "Usuario No Activo")
+							
 					else:
 						print(lista_headers_peliculas[indice] + linea[indice])
 				pelicula_encontrada = True
@@ -331,10 +330,7 @@ def saludo_inicial():
 	print("|                                         |")
 	print("|           Inicializando Sistema         |")
 	print("|                                         |")
-	print("|              Cargando Datos             |")
-	print("|                                         |")
 	print("* --------------------------------------- *")
-	print("Inicializando sistema, por favor espere....")
 	print("\n")
 
 
@@ -399,20 +395,6 @@ def save_cliente_nuevo(lista):
 	# OPERACION
 	with open(url_db_usuarios, 'a', encoding='utf-8') as db_usuarios:
 	    db_usuarios.write("\n%s, %s, %s, %s, %s, %s, %s, %s" % (lista[0],lista[1],lista[2],lista[3],lista[4],lista[5],lista[6],lista[7]))
-
-	''' Version 2: Da errores, agregar cosas al final, no en nueva linea
-	with open(url_db_usuarios, 'a', encoding='utf-8') as db_usuarios:
-	    escritura = csv.writer(db_usuarios, delimiter=',',
-	                            quotechar='|', quoting=csv.QUOTE_MINIMAL)
-	    escritura.writerows(lista)
-	'''
-
-	''' Version 1: Da errores
-	with open(url_db_usuarios) as archivo:
-	    with open(url_db_usuarios, "a") as archivo:
-	    	writer = csv.writer(archivo)
-	    	writer.writerows(lista)
-	'''
 
 	return resultado
 
