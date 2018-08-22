@@ -17,6 +17,8 @@ import sys
 # las peliculas y los clientes.
 # http://sebastianraschka.com/Articles/2014_python_2_3_key_diff.html
 
+# Obtener el tiempo para guardar: https://www.cyberciti.biz/faq/howto-get-current-date-time-in-python/
+
 
 def opciones_de_menu_principal():
 	mensaje_menu_principal()
@@ -52,8 +54,6 @@ def menu():
 			# Si opcion es valida, ingresar a submenus
 			if opcion_menu == 1:
 				opcion_registrar_cliente()
-				# Volver a llamar al menu
-				menu()
 
 			elif opcion_menu == 2:
 			    function_menu_peliculas_sistema()
@@ -99,6 +99,8 @@ def opcion_registrar_cliente():
 		print("\nUsuario registrado exitosamente\n")
 	else:
 		print("\nDatos no guardados\n")
+
+	menu()
 	
 
 def mensaje_function_menu_peliculas_sistema():
@@ -154,8 +156,9 @@ def function_menu_peliculas_sistema():
 
 			elif opcion_menu == 3:
 
+				function_editar_informacion_pelicula()
 			    # Volver a llamar al menu
-			    function_menu_peliculas_sistema()
+				function_menu_peliculas_sistema()
 
 			else:
 
@@ -171,6 +174,69 @@ def function_menu_peliculas_sistema():
 
 			# Volver a llamar al menu
 			function_menu_peliculas_sistema()
+
+
+def function_imprimir_peliculas():
+
+	url_db_peliculas = "peliculas.csv"
+
+	# OPERACION
+	with open(url_db_peliculas, 'r', encoding='utf-8') as file:
+		file = csv.reader(file, delimiter=',')
+		for line in file:
+			print(line)
+
+
+def function_imprimir_usuarios():
+
+	url_db_usuarios = "usuarios.csv"
+
+	# OPERACION
+	with open(url_db_usuarios, 'r', encoding='utf-8') as file:
+		file = csv.reader(file, delimiter=',')
+		for line in file:
+			print(line)
+
+
+def function_editar_informacion_pelicula():
+
+	# Imprimir lista de peliculas en DB
+	function_imprimir_peliculas()
+	print("\n")
+
+	# Si existe la pelicula se almacena en variable, sino no almacena nada
+	movie_list = function_buscar_peliculas_con_retorno()
+	print("\n")
+
+	# Imprimir la lista de peliculas que hay
+	print(movie_list)
+	print("\n")
+
+	# Volver a llamar al menu de peliculas
+	function_menu_peliculas_sistema()
+
+
+def function_buscar_peliculas_con_retorno():
+
+	url_db_movies = "peliculas.csv"
+	movie_found = False
+	result = [];
+
+	movie_id = input("Ingrese el id de pelicula (id de 5 numeros: #####): ")
+
+	with open(url_db_movies, 'r', encoding='utf-8') as file:
+		file = csv.reader(file, delimiter='|')
+		for line in file:
+			if line[0] == movie_id:
+				movie_found = True
+				result = line;
+				break
+
+		if movie_found != True:
+			print("Pelicula no encontrada, regresando a menu de peliculas")
+			function_menu_peliculas_sistema()
+
+	return result
 
 
 def function_agregar_nueva_pelicula():
@@ -216,6 +282,7 @@ def function_registrar_pelicula_nueva():
 
 	return datos_pelicula_nueva
 
+
 def function_buscar_peliculas_return():
 
 	resultado = False
@@ -253,6 +320,7 @@ def buscar_id_pelicula_en_db_return(id_pelicula):
 
 	return pelicula_encontrada
 
+
 def save_pelicula_nueva(lista):
 	
 	# INICIALIZACION
@@ -274,6 +342,7 @@ def function_buscar_peliculas():
 
 	print("\n")
 
+
 def buscar_id_pelicula_en_db(id_pelicula):
 
 	'''
@@ -291,7 +360,7 @@ def buscar_id_pelicula_en_db(id_pelicula):
 
 	# OPERACION
 	with open(url_db_peliculas, 'r', encoding='utf-8') as db_peliculas:
-		archivo = csv.reader(db_peliculas, delimiter=',')
+		archivo = csv.reader(db_peliculas, delimiter='|')
 		for linea in archivo:
 			if linea[0] == id_pelicula:
 				for indice in range(len(linea)):
