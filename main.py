@@ -200,42 +200,77 @@ def function_imprimir_usuarios():
 
 def function_editar_informacion_pelicula():
 
+	movie_list = []
+	movie_db = "peliculas.csv"
+	mensaje_alerta = "\nNo se encuentra la pelicula\n"
+	found_movie = False
+	lista_headers_peliculas = headers_peliculas_sistema()
+
 	# Imprimir lista de peliculas en DB
+	print("Por favor revise la siguiente lista\n")
 	function_imprimir_peliculas()
 	print("\n")
 
-	# Si existe la pelicula se almacena en variable, sino no almacena nada
-	movie_list = function_buscar_peliculas_con_retorno()
-	print("\n")
+	# Preguntar el id que quiere modificar
+	movie_id = input("Ingrese el id de pelicula a editar (id de 5 numeros: #####): ")
 
-	# Imprimir la lista de peliculas que hay
-	print(movie_list)
-	print("\n")
+	is_number = verify_if_number(movie_id)
+
+	# Si es numero, pasamos a lo siguiente
+	if is_number == True:
+		
+		# OPERACION
+		with open(movie_db, 'w', encoding='utf-8') as csv_output:
+			writer = csv.reader(csv_output, delimiter='|')
+
+			with open(movie_db, 'r', encoding='utf-8') as csv_file:
+
+				reader = csv.reader(csv_file, delimiter='|')
+				for linea in reader:
+					if linea[0] == int(movie_id):
+						for indice in range(len(linea)):
+							if indice == 3:
+								if int(linea[indice]) == 1:
+									print(lista_headers_peliculas[indice] + "DVD-ROM")
+								else:
+									print(lista_headers_peliculas[indice] + "Blueray Disc")
+
+							elif indice == 4:
+								if int(linea[indice]) == 1:
+									print(lista_headers_peliculas[indice] + "Usuario Activo")
+								else:
+									print(lista_headers_peliculas[indice] + "Usuario No Activo")
+									
+							else:
+								print(lista_headers_peliculas[indice] + linea[indice])
+						found_movie = True
+						break
+
+	else:
+		print("Id no es un numero. Volvera al menu anterior")
+		function_menu_peliculas_sistema()
 
 	# Volver a llamar al menu de peliculas
 	function_menu_peliculas_sistema()
 
 
-def function_buscar_peliculas_con_retorno():
+def verify_if_number(movie_id):
 
-	url_db_movies = "peliculas.csv"
-	movie_found = False
-	result = [];
+	'''
+		Receive data, if it is correct, will return a True.
+	'''
 
-	movie_id = input("Ingrese el id de pelicula (id de 5 numeros: #####): ")
+	result = False
 
-	with open(url_db_movies, 'r', encoding='utf-8') as file:
-		file = csv.reader(file, delimiter='|')
-		for line in file:
-			if line[0] == movie_id:
-				movie_found = True
-				result = line;
-				break
-
-		if movie_found != True:
-			print("Pelicula no encontrada, regresando a menu de peliculas")
-			function_menu_peliculas_sistema()
-
+	try:
+		number = int(movie_id)
+		result = True
+	except Exception as e:
+		print("El valor ingresado no es un numero, intente de nuevo")
+		print("\n")
+		# Volver a llamar al menu de peliculas
+		function_menu_peliculas_sistema()
+	
 	return result
 
 
@@ -281,44 +316,6 @@ def function_registrar_pelicula_nueva():
 	datos_pelicula_nueva.insert(4, str(pelicula_nueva_estadoPelicula_cleaner()))
 
 	return datos_pelicula_nueva
-
-
-def function_buscar_peliculas_return():
-
-	resultado = False
-
-	id_pelicula = input("Ingrese el id de pelicula (id de 5 numeros: #####): ")
-
-	resultado = buscar_id_pelicula_en_db_return(id_pelicula)
-
-	return resultado
-
-	print("\n")
-
-
-def buscar_id_pelicula_en_db_return(id_pelicula):
-
-	'''
-		Funcion recibe id de pelicula
-		Busca id de pelicula en el CSV
-		Si existe, retorna True
-		De otro modo, si no existe, retorna False
-	'''
-
-	# INICIALIZACION
-	lista_headers_peliculas = headers_peliculas_sistema()
-	url_db_peliculas = "peliculas.csv"
-	pelicula_encontrada = False
-
-	# OPERACION
-	with open(url_db_peliculas, 'r', encoding='utf-8', newline='') as db_peliculas:
-		archivo = csv.reader(db_peliculas, delimiter=',')
-		for linea in archivo:
-			if linea[0] == id_pelicula:
-				pelicula_encontrada = True
-				break
-
-	return pelicula_encontrada
 
 
 def save_pelicula_nueva(lista):
