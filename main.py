@@ -220,31 +220,31 @@ def function_editar_informacion_pelicula():
 	if is_number == True:
 		
 		# OPERACION
-		with open(movie_db, 'w', encoding='utf-8') as csv_output:
-			writer = csv.reader(csv_output, delimiter='|')
+		with open(movie_db, 'w', encoding='utf-8') as csv_writer:
+			writer = csv.reader(csv_writer, delimiter='|')
 
-			with open(movie_db, 'r', encoding='utf-8') as csv_file:
+		with open(movie_db, 'r', encoding='utf-8') as csv_reader:
+			reader = csv.reader(csv_reader, delimiter='|')
 
-				reader = csv.reader(csv_file, delimiter='|')
-				for linea in reader:
-					if linea[0] == int(movie_id):
-						for indice in range(len(linea)):
-							if indice == 3:
-								if int(linea[indice]) == 1:
-									print(lista_headers_peliculas[indice] + "DVD-ROM")
-								else:
-									print(lista_headers_peliculas[indice] + "Blueray Disc")
-
-							elif indice == 4:
-								if int(linea[indice]) == 1:
-									print(lista_headers_peliculas[indice] + "Usuario Activo")
-								else:
-									print(lista_headers_peliculas[indice] + "Usuario No Activo")
-									
+			for linea in reader:
+				if linea[0] == int(movie_id):
+					for indice in range(len(linea)):
+						if indice == 3:
+							if int(linea[indice]) == 1:
+								print(lista_headers_peliculas[indice] + "DVD-ROM")
 							else:
-								print(lista_headers_peliculas[indice] + linea[indice])
-						found_movie = True
-						break
+								print(lista_headers_peliculas[indice] + "Blueray Disc")
+
+						elif indice == 4:
+							if int(linea[indice]) == 1:
+								print(lista_headers_peliculas[indice] + "Usuario Activo")
+							else:
+								print(lista_headers_peliculas[indice] + "Usuario No Activo")
+								
+						else:
+							print(lista_headers_peliculas[indice] + linea[indice])
+					found_movie = True
+					break
 
 	else:
 		print("Id no es un numero. Volvera al menu anterior")
