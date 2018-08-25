@@ -200,51 +200,54 @@ def function_imprimir_usuarios():
 
 def function_editar_informacion_pelicula():
 
+	# Variable list
 	movie_list = []
 	movie_db = "peliculas.csv"
 	mensaje_alerta = "\nNo se encuentra la pelicula\n"
 	found_movie = False
 	lista_headers_peliculas = headers_peliculas_sistema()
 
-	# Imprimir lista de peliculas en DB
+
+	# Print movie list
 	print("Por favor revise la siguiente lista\n")
 	function_imprimir_peliculas()
 	print("\n")
 
+
 	# Preguntar el id que quiere modificar
 	movie_id = input("Ingrese el id de pelicula a editar (id de 5 numeros: #####): ")
 
-	is_number = verify_if_number(movie_id)
 
-	# Si es numero, pasamos a lo siguiente
+	is_number = verify_if_number(movie_id)
 	if is_number == True:
 		
-		# OPERACION
-		with open(movie_db, 'w', encoding='utf-8') as csv_writer:
-			writer = csv.reader(csv_writer, delimiter='|')
 
-		with open(movie_db, 'r', encoding='utf-8') as csv_reader:
-			reader = csv.reader(csv_reader, delimiter='|')
 
-			for linea in reader:
-				if linea[0] == int(movie_id):
-					for indice in range(len(linea)):
-						if indice == 3:
-							if int(linea[indice]) == 1:
-								print(lista_headers_peliculas[indice] + "DVD-ROM")
-							else:
-								print(lista_headers_peliculas[indice] + "Blueray Disc")
+			with open(movie_db, 'w', encoding='utf-8') as csv_writable:
+				writer = csv.writer(csv_writable, delimiter='|')
 
-						elif indice == 4:
-							if int(linea[indice]) == 1:
-								print(lista_headers_peliculas[indice] + "Usuario Activo")
-							else:
-								print(lista_headers_peliculas[indice] + "Usuario No Activo")
-								
-						else:
-							print(lista_headers_peliculas[indice] + linea[indice])
-					found_movie = True
-					break
+				with open(movie_db, 'r', encoding='utf-8') as csv_readable:
+					reader = csv.reader(csv_readable, delimiter='|')
+
+					for row in reader:
+						if linea[0] == int(movie_id):
+							for indice in range(len(linea)):
+								if indice == 3:
+									if int(linea[indice]) == 1:
+										print(lista_headers_peliculas[indice] + "DVD-ROM")
+									else:
+										print(lista_headers_peliculas[indice] + "Blueray Disc")
+
+								elif indice == 4:
+									if int(linea[indice]) == 1:
+										print(lista_headers_peliculas[indice] + "Usuario Activo")
+									else:
+										print(lista_headers_peliculas[indice] + "Usuario No Activo")
+										
+								else:
+									print(lista_headers_peliculas[indice] + linea[indice])
+							found_movie = True
+							break
 
 	else:
 		print("Id no es un numero. Volvera al menu anterior")
@@ -272,6 +275,39 @@ def verify_if_number(movie_id):
 		function_menu_peliculas_sistema()
 	
 	return result
+
+
+def get_row_number_of_id_movie(id_pelicula):
+
+	'''
+		Funcion recibe id de pelicula
+		Busca id de pelicula en el CSV
+		Si existe, retorna True
+		De otro modo, si no existe, retorna False
+	'''
+
+	# INICIALIZACION
+	url_db_peliculas = "peliculas.csv"
+	pelicula_encontrada = False
+	mensaje_alerta = "\nNo se encuentra la pelicula\n"
+	resultado = 1
+
+	# OPERACION
+	with open(url_db_peliculas, 'r', encoding='utf-8') as db_peliculas:
+		archivo = csv.reader(db_peliculas, delimiter='|')
+		for linea in archivo:
+			if linea[0] == id_pelicula:
+				pelicula_encontrada = True
+				break
+			else:
+				resultado += 1
+
+		if pelicula_encontrada != True:
+			print(mensaje_alerta)
+
+	print(resultado)
+
+	return resultado
 
 
 def function_agregar_nueva_pelicula():
