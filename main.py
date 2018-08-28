@@ -277,38 +277,25 @@ def verify_if_number(movie_id):
 	return result
 
 
-def get_row_number_of_id_movie(id_pelicula):
+def get_movie_id_row_number(movie_id):
 
-	'''
-		Funcion recibe id de pelicula
-		Busca id de pelicula en el CSV
-		Si existe, retorna True
-		De otro modo, si no existe, retorna False
-	'''
+	# VARIABLE LIST
+	movies_db = "peliculas.csv"
+	count = 0
+	result = False
 
-	# INICIALIZACION
-	url_db_peliculas = "peliculas.csv"
-	pelicula_encontrada = False
-	mensaje_alerta = "\nNo se encuentra la pelicula\n"
-	resultado = 1
-
-	# OPERACION
-	with open(url_db_peliculas, 'r', encoding='utf-8') as db_peliculas:
-		archivo = csv.reader(db_peliculas, delimiter='|')
-		for linea in archivo:
-			if linea[0] == id_pelicula:
-				pelicula_encontrada = True
+	# OPERATION
+	with open(movies_db, 'r', encoding='utf-8') as csv_movies:
+		readable = csv.reader(csv_movies, delimiter='|')
+		for row in readable:
+			if row[0] == movie_id:
+				print(row[0])
+				print("Pelicula encontrada")
+				result = True
 				break
-			else:
-				resultado += 1
 
-		if pelicula_encontrada != True:
-			print(mensaje_alerta)
-
-	print(resultado)
-
-	return resultado
-
+	return result
+	
 
 def function_agregar_nueva_pelicula():
 
