@@ -201,11 +201,12 @@ def function_imprimir_usuarios():
 def function_editar_informacion_pelicula():
 
 	# Variable list
-	movie_list = []
-	movie_db = "peliculas.csv"
-	mensaje_alerta = "\nNo se encuentra la pelicula\n"
-	found_movie = False
-	lista_headers_peliculas = headers_peliculas_sistema()
+	movie_db_path = "peliculas.csv"
+	new_movie_data = []
+	is_number = True
+	# Convert iterable to list
+	r = csv.reader(open(movie_db_path))
+	reader_as_list = list(r)
 
 
 	# Print movie list
@@ -215,87 +216,165 @@ def function_editar_informacion_pelicula():
 
 
 	# Preguntar el id que quiere modificar
-	movie_id = input("Ingrese el id de pelicula a editar (id de 5 numeros: #####): ")
+	movie_id = input("Ingrese Id de pelicula a editar, id de 5 digitos (#####): ")
 
 
+	# Verify if Number and len(5 digits)
 	is_number = verify_if_number(movie_id)
-	if is_number == True:
-		
 
+	if is_number:
+		# Position of movie id
+		movie_id_position = 0
 
-			with open(movie_db, 'w', encoding='utf-8') as csv_writable:
-				writer = csv.writer(csv_writable, delimiter='|')
+		# Check on file
+		for row in reader_as_list:
 
-				with open(movie_db, 'r', encoding='utf-8') as csv_readable:
-					reader = csv.reader(csv_readable, delimiter='|')
+			# If movie id found
+			if row[0] == movie_id:
 
-					for row in reader:
-						if linea[0] == int(movie_id):
-							for indice in range(len(linea)):
-								if indice == 3:
-									if int(linea[indice]) == 1:
-										print(lista_headers_peliculas[indice] + "DVD-ROM")
-									else:
-										print(lista_headers_peliculas[indice] + "Blueray Disc")
+				# Get position
+				new_movie_data = function_registrar_pelicula_nueva()
+				movie_array_counter = 0
 
-								elif indice == 4:
-									if int(linea[indice]) == 1:
-										print(lista_headers_peliculas[indice] + "Usuario Activo")
-									else:
-										print(lista_headers_peliculas[indice] + "Usuario No Activo")
-										
-								else:
-									print(lista_headers_peliculas[indice] + linea[indice])
-							found_movie = True
-							break
+				# For every item on the line[each iterable position]
+				for i in reader_as_list[movie_id_position]:
+					# Preparing for writting the CSV
+					print("Item: " + reader_as_list[movie_id_position][movie_array_counter])
+					reader_as_list[movie_id_position][movie_array_counter] = new_movie_data[movie_array_counter]
+					movie_array_counter += 1
+
+				write_on_csv(reader_as_list)
+				break
+
+			else:
+				movie_id_position += 1
 
 	else:
-		print("Id no es un numero. Volvera al menu anterior")
+		# Is not a number
+		print("Id is not a number.")
 		function_menu_peliculas_sistema()
 
 	# Volver a llamar al menu de peliculas
 	function_menu_peliculas_sistema()
 
 
+def write_on_csv(new_movies_db):
+
+	with open('peliculas.csv', 'w', encoding='utf-8') as csv_writter:
+		writter = csv.writer(csv_writter, delimiter=',')
+		for row in new_movies_db:
+				writter.writerow(new_movies_db)
+		print("Pelicula actualizada con existo.")
+
+
+'''
+def function_editar_informacion_pelicula():
+
+	# Variable list
+	movie_db_path = "peliculas.csv"
+	new_movie_data = []
+	is_number = True
+	# Convert iterable to list
+	r = csv.reader(open(movie_db_path))
+	reader_as_list = list(r)
+
+
+	# Print movie list
+	print("Por favor revise la siguiente lista\n")
+	function_imprimir_peliculas()
+	print("\n")
+
+
+	# Preguntar el id que quiere modificar
+	movie_id = input("Ingrese Id de pelicula a editar, id de 5 digitos (#####): ")
+
+
+	# Verify if it is a number and len(5 digits)
+	is_number = verify_if_number(movie_id)
+
+	if is_number:
+
+		# Read the CSV and saved in an object.
+		with open(movie_db_path, 'r', encoding='utf-8') as csv_reader:
+			reader = csv.reader(csv_reader, delimiter=',')
+
+			# Position of movie id
+			movie_id_position = 0
+
+			# Check on file
+			for row in reader:
+
+				# If movie id found
+				if row[0] == movie_id:
+
+					# Get position
+					new_movie_data = function_registrar_pelicula_nueva()
+					movie_array_counter = 0
+
+					for i in reader_as_list[movie_id_position]:
+						# Preparing for writting the CSV
+						print("Item: " + reader_as_list[movie_id_position][movie_array_counter])
+						reader_as_list[movie_id_position][movie_array_counter] = new_movie_data[movie_array_counter]
+						movie_array_counter += 1
+
+					write_on_csv(reader_as_list)
+					break
+
+				else:
+					movie_id_position += 1
+
+	else:
+		function_menu_peliculas_sistema()
+
+
+	# Volver a llamar al menu de peliculas
+	function_menu_peliculas_sistema()
+
+
+def write_on_csv(new_movies_db):
+
+	with open('peliculas.csv', 'w', encoding='utf-8') as csv_writter:
+		writter = csv.writer(csv_writter, delimiter=',')
+		for row in new_movies_db:
+				writter.writerow(new_movies_db)
+		print("Pelicula actualizada con existo.")
+'''
+
+
 def verify_if_number(movie_id):
 
-	'''
-		Receive data, if it is correct, will return a True.
-	'''
-
 	result = False
 
-	try:
-		number = int(movie_id)
-		result = True
-	except Exception as e:
-		print("El valor ingresado no es un numero, intente de nuevo")
-		print("\n")
-		# Volver a llamar al menu de peliculas
-		function_menu_peliculas_sistema()
-	
+	if len(movie_id) == 5:
+		try:
+			movie_id = int(movie_id)
+			result = True
+		except Exception as e:
+			print("Value is not a number.")
+	else:
+		print("Value is not 5 digits length.")
+
 	return result
 
 
-def get_movie_id_row_number(movie_id):
+'''
+def modify_movie_data(movie_id, movie_db_path):
 
-	# VARIABLE LIST
-	movies_db = "peliculas.csv"
+	# Variables
+	new_movie_data = []
 	count = 0
-	result = False
 
-	# OPERATION
-	with open(movies_db, 'r', encoding='utf-8') as csv_movies:
-		readable = csv.reader(csv_movies, delimiter='|')
-		for row in readable:
-			if row[0] == movie_id:
-				print(row[0])
-				print("Pelicula encontrada")
-				result = True
-				break
+	# Convert the CSV to 2D array
+	csv_object = csv.reader(open(movie_db_path))
+	file = list(csv_object)
 
-	return result
-	
+	# Read the 2D array
+	for i in range(len(file)):
+		for j in range(len(file[i])):
+			print(file[i][j])
+			# if a[i][j]
+'''
+
 
 def function_agregar_nueva_pelicula():
 
