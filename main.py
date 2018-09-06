@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+# system_version: v.1.0
 
 # Importe de modulos
 import random
@@ -202,7 +203,8 @@ def function_editar_informacion_pelicula():
 
 	# Variable list
 	movie_db_path = "peliculas.csv"
-	new_movie_data = []
+	new_movie_data = ()
+	# new_movie_data = []
 	is_number = True
 	# Convert iterable to list
 	r = csv.reader(open(movie_db_path))
@@ -213,7 +215,6 @@ def function_editar_informacion_pelicula():
 	print("Por favor revise la siguiente lista\n")
 	function_imprimir_peliculas()
 	print("\n")
-
 
 	# Preguntar el id que quiere modificar
 	movie_id = input("Ingrese Id de pelicula a editar, id de 5 digitos (#####): ")
@@ -239,7 +240,6 @@ def function_editar_informacion_pelicula():
 				# For every item on the line[each iterable position]
 				for i in reader_as_list[movie_id_position]:
 					# Preparing for writting the CSV
-					print("Item: " + reader_as_list[movie_id_position][movie_array_counter])
 					reader_as_list[movie_id_position][movie_array_counter] = new_movie_data[movie_array_counter]
 					movie_array_counter += 1
 
@@ -260,85 +260,22 @@ def function_editar_informacion_pelicula():
 
 def write_on_csv(new_movies_db):
 
-	with open('peliculas.csv', 'w', encoding='utf-8') as csv_writter:
-		writter = csv.writer(csv_writter, delimiter=',')
-		for row in new_movies_db:
-				writter.writerow(new_movies_db)
-		print("Pelicula actualizada con existo.")
-
-
-'''
-def function_editar_informacion_pelicula():
-
-	# Variable list
-	movie_db_path = "peliculas.csv"
-	new_movie_data = []
-	is_number = True
-	# Convert iterable to list
-	r = csv.reader(open(movie_db_path))
-	reader_as_list = list(r)
-
-
-	# Print movie list
-	print("Por favor revise la siguiente lista\n")
-	function_imprimir_peliculas()
-	print("\n")
-
-
-	# Preguntar el id que quiere modificar
-	movie_id = input("Ingrese Id de pelicula a editar, id de 5 digitos (#####): ")
-
-
-	# Verify if it is a number and len(5 digits)
-	is_number = verify_if_number(movie_id)
-
-	if is_number:
-
-		# Read the CSV and saved in an object.
-		with open(movie_db_path, 'r', encoding='utf-8') as csv_reader:
-			reader = csv.reader(csv_reader, delimiter=',')
-
-			# Position of movie id
-			movie_id_position = 0
-
-			# Check on file
-			for row in reader:
-
-				# If movie id found
-				if row[0] == movie_id:
-
-					# Get position
-					new_movie_data = function_registrar_pelicula_nueva()
-					movie_array_counter = 0
-
-					for i in reader_as_list[movie_id_position]:
-						# Preparing for writting the CSV
-						print("Item: " + reader_as_list[movie_id_position][movie_array_counter])
-						reader_as_list[movie_id_position][movie_array_counter] = new_movie_data[movie_array_counter]
-						movie_array_counter += 1
-
-					write_on_csv(reader_as_list)
-					break
-
-				else:
-					movie_id_position += 1
-
-	else:
-		function_menu_peliculas_sistema()
-
-
-	# Volver a llamar al menu de peliculas
-	function_menu_peliculas_sistema()
-
-
-def write_on_csv(new_movies_db):
+	line_number = 0
 
 	with open('peliculas.csv', 'w', encoding='utf-8') as csv_writter:
 		writter = csv.writer(csv_writter, delimiter=',')
-		for row in new_movies_db:
-				writter.writerow(new_movies_db)
-		print("Pelicula actualizada con existo.")
-'''
+		# writter = csv.writer(csv_writter, lineterminator='\n')
+		writter.writerows(new_movies_db)
+
+		# (1, 2) If newline='' is not specified, newlines embedded 
+		# inside quoted fields will not be interpreted correctly, 
+		# and on platforms that use \r\n linendings on write 
+		# an extra \r will be added. It should always be safe 
+		# to specify newline='', since the csv module does 
+		# its own (universal) newline handling.
+		
+
+	print("Pelicula actualizada con existo.")
 
 
 def verify_if_number(movie_id):
@@ -357,51 +294,16 @@ def verify_if_number(movie_id):
 	return result
 
 
-'''
-def modify_movie_data(movie_id, movie_db_path):
-
-	# Variables
-	new_movie_data = []
-	count = 0
-
-	# Convert the CSV to 2D array
-	csv_object = csv.reader(open(movie_db_path))
-	file = list(csv_object)
-
-	# Read the 2D array
-	for i in range(len(file)):
-		for j in range(len(file[i])):
-			print(file[i][j])
-			# if a[i][j]
-'''
-
-
 def function_agregar_nueva_pelicula():
 
-	resultado = function_buscar_peliculas_return()
+	# Variable list
+	datos_nueva_pelicula_listos = ()
 
-	if resultado == True:
-		print("")
-		print("La pelicula que busca ya existe, debera buscar otra.")
-		print("")
-		opcion_usuario = int(input("Presione 1 para buscar de nuevo o bien 0 para salir: "))
-		if opcion_usuario >= 0 and opcion_usuario <= 1:
-			if opcion_usuario == 1:
-				function_agregar_nueva_pelicula()
-			else:
-				menu()
-		else:
-			print("")
-			print("Ingreso un valor no valido, volviendo a la opcion Ingresar nueva película")
-			print("")
-			function_agregar_nueva_pelicula()
-	else:
-		print("")
-		datos_nueva_pelicula_listos = function_registrar_pelicula_nueva()
-		save_pelicula_nueva(datos_nueva_pelicula_listos)
-		print("")
-		print("Pelicula guardada exitosamente")
-		print("")
+	print("")
+	save_pelicula_nueva(function_registrar_pelicula_nueva())
+	print("")
+	print("Pelicula guardada exitosamente")
+	print("")
 
 
 def function_registrar_pelicula_nueva():
@@ -409,7 +311,7 @@ def function_registrar_pelicula_nueva():
 	# INICIALIZACION
 	datos_pelicula_nueva = []
 
-	print("Ingrese los siguientes datos de la pelicula nueva:")
+	print("Ingrese los siguientes datos de la pelicula nueva -----> ")
 
 	datos_pelicula_nueva.insert(0, str(pelicula_nueva_id_cleaner()))
 	datos_pelicula_nueva.insert(1, pelicula_nueva_nombre_cleaner())
@@ -815,14 +717,6 @@ def cliente_nuevo_tipo_telefono_cleaner():
 												
 	# RESULTADO
 	return resultado
-
-
-def imprimir_listas(lista):
-
-	for x in lista:
-		print(x, end="")
-		print(", ")
-
 
 
 ######## DANIEL MORA ############
