@@ -721,6 +721,8 @@ def cliente_nuevo_tipo_telefono_cleaner():
 
 ######## DANIEL MORA ############
 
+'''
+
 def consulta_menu():
 	
 	print("\n")
@@ -763,14 +765,14 @@ def revisarUsuario(lista, busqueda):
 			print("Usuario encontrado!: ")
 			print(" ")
 
-			'''
+			##### 
 			for indice in range(len(linea)):
 				if indice == 3:
 					if int(linea[indice]) == 1:
 						print(lista_headers_peliculas[indice] + "DVD-ROM")
 					else:
 						print(lista_headers_peliculas[indice] + "Blueray Disc")
-			'''
+
 
 			for indice in range(len(lista_usuario)):
 				if indice == 3:
@@ -787,7 +789,8 @@ def revisarUsuario(lista, busqueda):
 				else:
 					print(header[indice] + lista_usuario[indice])
 			usuario_encontrado = True
-			'''
+			
+			##### 
 				elif indice == 4:
 					if int(linea[indice]) == 1:
 						print(lista_headers_peliculas[indice] + "Usuario Activo")
@@ -797,7 +800,8 @@ def revisarUsuario(lista, busqueda):
 					print(lista_headers_peliculas[indice] + linea[indice])
 			pelicula_encontrada = True
 			break
-			'''
+			#####
+
 			break
 
 	if usuario_encontrado != True:
@@ -918,6 +922,8 @@ def consultar_informacion_menu():
 
 		else:
 			print ("\nPor favor introduzca una opcion valida")
+'''
+
 
 
 ### Main
