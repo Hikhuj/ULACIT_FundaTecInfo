@@ -717,7 +717,6 @@ def cliente_nuevo_tipo_telefono_cleaner():
 												
 	# RESULTADO
 	return resultado
-'
 
 
 
